@@ -1,13 +1,21 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define MAX_MESSAGE_LENGTH 25
+
+void encode(int num_symbols, long double probabilities[num_symbols + 2]);
+void decode(int num_symbols, long double probabilities[num_symbols + 2]);
+
 long double sum_to_index(
     int num_symbols, long double probabilities[num_symbols + 2], 
     int index
 );
+int find_interval(
+    int num_symbols, long double probabilities[num_symbols + 2], 
+    long double code_number
+);
 
 int main (void) {
-    //Currently only encoding
 
     printf("How many symbols are there? ");
     int num_symbols;
@@ -21,6 +29,18 @@ int main (void) {
     }
     probabilities[num_symbols + 1] = 1;
 
+    int is_encoding;
+    printf("Type 1 to encode, 2 to decode: ");
+    scanf("%d", &is_encoding);
+    if (is_encoding == 1) {
+        encode(num_symbols, probabilities);
+    } else {
+        decode(num_symbols, probabilities);
+    }
+
+}
+
+void encode(int num_symbols, long double probabilities[num_symbols + 2]) {
     long double current_lower_bound = 0;
     long double current_bound_width = 1;
 
@@ -40,6 +60,37 @@ int main (void) {
 
 }
 
+void decode(int num_symbols, long double probabilities[num_symbols + 2]) {
+    printf("Enter a number to decode: ");
+    long double code_number;
+    scanf("%Lf", &code_number);
+
+    int current_symbol = 0;
+    while (current_symbol < num_symbols) {
+        current_symbol = find_interval(num_symbols, probabilities, code_number);
+        printf("s%d\n", current_symbol);
+
+        //Rescaling code number
+        long double interval_lower_bound = sum_to_index(num_symbols, probabilities, current_symbol);
+        long double interval_width = probabilities[current_symbol];
+
+        code_number = (code_number - interval_lower_bound) / interval_width;
+    }
+}
+
+//Finds the interval containing the given code number
+int find_interval(int num_symbols, long double probabilities[num_symbols + 2], long double code_number) {
+    long double sum = 0;
+    for (int i = 1; i <= num_symbols + 1; i++) {
+        if (code_number >= sum && code_number < sum + probabilities[i]) {
+            return i;
+        }
+        sum += probabilities[i];
+    }
+    return num_symbols;
+}
+
+//Returns the sum of all probabilities up to a given index
 long double sum_to_index(int num_symbols, long double probabilities[num_symbols + 2], int index) {
     long double sum = 0;
     for (int i = 0; i < index; i++) {
