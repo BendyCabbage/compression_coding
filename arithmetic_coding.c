@@ -4,7 +4,6 @@ Made for MATH3411 (Information, Codes and Ciphers)
 Only use for educational purposes
 
 Encodes and decodes using arithmetic coding
-I'm pretty sure long doubles are overkill for this classes' usecase but it's fine
 */
 
 #include <stdio.h>
