@@ -1,7 +1,14 @@
+/*
+Made by Josh Caithness (https://github.com/BendyCabbage)
+Made for MATH3411 (Information, Codes and Ciphers)
+Only use for educational purposes
+
+Encodes and decodes using arithmetic coding
+I'm pretty sure long doubles are overkill for this classes' usecase but it's fine
+*/
+
 #include <stdio.h>
 #include <assert.h>
-
-#define MAX_MESSAGE_LENGTH 25
 
 void encode(int num_symbols, long double probabilities[num_symbols + 2]);
 void decode(int num_symbols, long double probabilities[num_symbols + 2]);
