@@ -37,7 +37,10 @@ int main (int argc, char *argv[]) {
     } else {
         printf("Plaintext: ");
     }
-    printf("%s\n", ciphertext);
+    for (int i = 0; i < message_length; i++) {
+        printf("%c", ciphertext[i]);
+    }
+    printf("\n");
 
     return 0;
 }
